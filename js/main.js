@@ -5,7 +5,8 @@ var activities = [{
     price: 200
   },
   {
-    name: "js-frameworks",
+    name: "
+    js-frameworks",
     day: "tuesday",
     price: 100,
     begin: 900,
