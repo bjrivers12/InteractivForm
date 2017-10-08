@@ -1,29 +1,24 @@
-//definev variables for verifications
-const ccNumInput = document.getElementById("cc-num");
-const zipNumInput = document.getElementById("zip");
-const ccvNumInput = document.getElementById("ccv");
+var userNumInput = document.getElementById("cc-num");
 
-//functions to retrieve any user input from the form
-function getUserInput(info) {
-  return info.value;
+function getUserInput() {
+  return userNumInput.value;
 }
 
-//luhnCheck algorithm to evaluate if credit card is real
 function luhnCheck() {
-  let ccNum = getUserInput(ccNumInput),
+  var ccNum = getUserInput(),
     ccNumSplit = ccNum.split(""),
     sum = 0;
-  let singleNums = [],
+  var singleNums = [],
     doubleNums = [],
     finalArry = undefined;
-  let validCard = false;
+  var validCard = false;
 
   if ((!/\d{15,16}(~\W[a-zA-Z])*$/g.test(ccNum)) || (ccNum.length > 16)) {
     return false;
   }
 
   if (ccNum.length === 15) { //american express
-    for (let i = ccNumSplit.length - 1; i >= 0; i--) {
+    for (var i = ccNumSplit.length - 1; i >= 0; i--) {
       if (i % 2 === 0) {
         singleNums.push(ccNumSplit[i]);
       } else {
@@ -58,29 +53,8 @@ function luhnCheck() {
   console.log(sum);
   return validCard;
   console.log(validCard);
-
-
 };
 
-function zipCheck() {
-  let zipNum = getUserInput(zipNumInput);
-  let validZip = false;
-  if ((/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
-    return true;
-  }
-  return validZip;
-  console.log(validZip);
-};
-
-function ccvCheck() {
-  let ccvNum = getUserInput(ccNumInput);
-  let validccvNum = false;
-  if ((/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
-    return true;
-  }
-  return validccvNum;
-  console.log(validccvNum);
-};
 
 document.getElementById("cc-num").addEventListener("blur", function() {
   document.getElementById("resultDiv").innerHTML = luhnCheck();
@@ -125,7 +99,16 @@ function listCart() { //-> array of Items
   return cartCopy;
 }
 
-
+//function checkTime () {
+//  for (var i in cart) {
+//    var start = cart[i].begin;
+//    var weekday = cart[i].day;
+//  }
+//  var result = activities.filter(function(v, i) {
+//  return (v["begin"] == start && i["day"] == weekday);
+//    console.log(result);
+//})
+//}
 
 //function saveCart() {
 //  localStorage.setItem("shoppingCart", JSON.stringify(cart))
@@ -135,6 +118,10 @@ function listCart() { //-> array of Items
 //  cart = JSON.parse(localStorage.getItem("shoppingCart"));
 //}
 
+//loadCart();
+
+//var array = listCart();
+//console.log(array);
 
 //Focus on first text box
 $("#name").focus();
@@ -179,22 +166,26 @@ $("#design").on("change", function() {
   };
 })
 
+
 $("#payment").on("change", function() {
   var element = document.getElementById("payment");
   var stb = element.options[element.selectedIndex].value;
   if (stb == "select_method") {
-    $("fieldset:eq(3) p:eq(0)").remove();
-    $("fieldset:eq(3) p:eq(1)").remove();
-    $("#credit-card").remove();
+    $("fieldset:eq(3) p:eq(0)").hide();
+    $("fieldset:eq(3) p:eq(1)").hide();
+    $("#credit-card").hide();
   } else if (stb == "credit card") {
-    $("fieldset:eq(3) p:eq(0)").remove();
-    $("fieldset:eq(3) p:eq(1)").remove();
+    $("fieldset:eq(3) p:eq(0)").hide();
+    $("fieldset:eq(3) p:eq(1)").hide();
+    $("#credit-card").show();
   } else if (stb == "paypal") {
-    $("#credit-card").remove();
-    $("fieldset:eq(3) p:eq(1)").remove();
+    $("#credit-card").hide();
+    $("fieldset:eq(3) p:eq(1)").hide();
+    $("fieldset:eq(3) p:eq(0)").show();
   } else if (stb == "bitcoin") {
-    $("#credit-card").remove();
-    $("fieldset:eq(3) p:eq(0)").remove();
+    $("#credit-card").hide();
+    $("fieldset:eq(3) p:eq(0)").hide();
+    $("fieldset:eq(3) p:eq(1)").show();
   };
 })
 
@@ -300,8 +291,6 @@ $("input[name='express']").change(function(event) {
     displayTotal();
   }
 });
-
-
 
 $("input[name='node']").change(function(event) {
   if ($("input[name='node']").prop("checked")) {
