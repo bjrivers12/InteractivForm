@@ -4,25 +4,6 @@ function getUserInput() {
   return userNumInput.value;
 }
 
-//( !$("fieldset:eq(2) input").prop("checked"))
-
-
-
-
-//function extract(name) {
-//  for( i = 0; i< 6 ; i++) {
-//  let price = $(".activities label:eq("+i+")").text();
-//  console.log(price);
-//  }
-//}
-
-//$(".activities label").each(function (i) {
-//  let price = $(".activities label:eq("+i+")").text().indexOf("$");
-//}
-//)
-
-
-
 $("#payment").on("change", function() {
   var element = document.getElementById("payment");
   var stb = element.options[element.selectedIndex].value;
@@ -45,12 +26,7 @@ $("#payment").on("change", function() {
   };
 })
 
-//function checkActivities () {
-//  console.log("yes");
-//};
-
 function verifyInputs() {
-
   let name = $("#name").val();
   let mail = $("#mail").val();
   let check = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -81,14 +57,13 @@ $("form").submit(function(event) {
 
 
 function luhnCheck() {
-  var ccNum = getUserInput(),
+  let ccNum = getUserInput(),
     ccNumSplit = ccNum.split(""),
     sum = 0;
-  var singleNums = [],
+  let singleNums = [],
     doubleNums = [],
     finalArry = undefined;
-  var validCard = false;
-
+  let validCard = false;
   if ((!/\d{15,16}(~\W[a-zA-Z])*$/g.test(ccNum)) || (ccNum.length > 16)) {
     return false;
   }
@@ -194,283 +169,287 @@ function checkCart() {
 
 
 $(".activities input").change(function(event) {
-  event.preventDefault();
-  if ($(this).prop("checked")) {
-    let name = $(this).attr("name");
-    console.log(name);
-    let info = $(".activities input[name=" + name + "]").parent().text();
-    let price = Number(info.substring(info.indexOf("$") + 1, info.indexOf("$") + 4));
-    let time = info.substring(info.indexOf(" — "), info.indexOf(","));
-    var item = {
-      name: name,
-      time: time,
-      price: price,
-    }
-    cart.push(item);
-    displayTotal();
-  } else {
-    cart.splice(item);
-    displayTotal();
-  }
-  //   checkCart();
-});
-
-function disableBox() {
-  for (var i in cart) {
-    if (cart[i].time === time) {
-      $("input[name=" + name + "]").prop('disabled', false);
-    }
-    break;
-  }
+      event.preventDefault();
+      if ($(this).prop("checked")) {
+        let name = $(this).attr("name");
+        console.log(name);
+        let info = $(".activities input[name=" + name + "]").parent().text();
+        let price = Number(info.substring(info.indexOf("$") + 1, info.indexOf("$") + 4));
+        let time = info.substring(info.indexOf(" — "), info.indexOf(","));
+        var item = {
+          name: name,
+          time: time,
+          price: price,
+        }
+        cart.push(item);
+        displayTotal();
+        disableBox(name, time);
+      } else {
+        cart.splice(item);
+        displayTotal();
+        disableBox(name, time);
+      }
 }
+    );
 
-//$("input[name='js-frameworks']").change(function(event){
-//    if ($("input[name='js-frameworks']").prop("checked")) {
-//      var item = {
-//        name:"js-frameworks",
-//    day: "tuesday",
-//    price: 100,
-//    begin:900,
-//    end:1200}
-//      cart.push(item);
-//      console.log(totalCart());
-//      $("input[name=express]").prop('disabled', true);
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("js-frameworks");
-//   console.log(totalCart());
-//      $("input[name=express]").prop('disabled', false);
-//      displayTotal();
-//}
-//});
-
-
-
-
-//Focus on first text box
-$("#name").focus();
-$("fieldset:eq(3) p:eq(0)").hide();
-$("fieldset:eq(3) p:eq(1)").hide();
-
-//add job role input for other selection
-$("#title").on("change", function() {
-  var element = document.getElementById("title");
-  var stb = element.options[element.selectedIndex].value;
-  var input = "<form id='other-title'><div class='student-search'><input placeholder='Your Job Role'>    <button>Submit</button></div></form>";
-  if (stb == "other") {
-    $("fieldset:eq(0)").append(input);
-  } else if (stb !== "other") {
-    $("#other-title").remove();
-  };
-})
-
-//change values based off selection
-$("#design").on("change", function() {
-  var element = document.getElementById("design");
-  var stb = element.options[element.selectedIndex].value;
-  if (stb == "js puns") {
-    $("option[value=tomato]").closest('option').remove();
-    $("option[value=steelblue]").closest('option').remove();
-    $("option[value=dimgrey]").closest('option').remove();
-    $("option[value=cornflowerblue]").closest('option').show();
-    $("option[value=darkslategrey]").closest('option').show();
-    $("option[value=gold]").closest('option').show();
-  } else if (stb == "heart js") {
-    $("option[value=cornflowerblue]").closest('option').remove();
-    $("option[value=darkslategrey]").closest('option').remove();
-    $("option[value=gold]").closest('option').remove();
-    $("option[value=tomato]").closest('option').show();
-    $("option[value=steelblue]").closest('option').show();
-    $("option[value=dimgrey]").closest('option').show();
-  } else {
-    $("option[value=cornflowerblue]").closest('option').show();
-    $("option[value=darkslategrey]").closest('option').show();
-    $("option[value=gold]").closest('option').show();
-    $("option[value=tomato]").closest('option').show();
-    $("option[value=steelblue]").closest('option').show();
-    $("option[value=dimgrey]").closest('option').show();
-  };
-})
-
-
-$("#payment").on("change", function() {
-  var element = document.getElementById("payment");
-  var stb = element.options[element.selectedIndex].value;
-  if (stb == "select_method") {
-    $("fieldset:eq(3) p:eq(0)").hide();
-    $("fieldset:eq(3) p:eq(1)").hide();
-    $("#credit-card").hide();
-  } else if (stb == "credit card") {
-    $("fieldset:eq(3) p:eq(0)").hide();
-    $("fieldset:eq(3) p:eq(1)").hide();
-    $("#credit-card").show();
-  } else if (stb == "paypal") {
-    $("#credit-card").hide();
-    $("fieldset:eq(3) p:eq(1)").hide();
-    $("fieldset:eq(3) p:eq(0)").show();
-  } else if (stb == "bitcoin") {
-    $("#credit-card").hide();
-    $("fieldset:eq(3) p:eq(0)").hide();
-    $("fieldset:eq(3) p:eq(1)").show();
-  };
-})
-
-function removeItemFromCart(name) {
-  // removes one item
-  for (var i in cart) {
-    if (cart[i].name === name) {
-      cart.splice(i, 1);
+    function disableBox(name, time) {
+      $(".activities input").each(function() {
+        let name2 = $(this).attr("name");
+        let lis = $(this).parent().text();
+        let time2 = lis.substring(lis.indexOf(" — "), lis.indexOf(","));
+        if (time == time2 && name !== name2) {
+          $("input[name=" + name2 + "]").prop('disabled', true);
+        } else {
+          $("input[name=" + name2 + "]").prop('disabled', false);
+        }
+      })
     }
-    break;
-  }
-}
-//  saveCart();
 
-function displayTotal() {
-  var total = totalCart();
-  $("fieldset:eq(2)").append("<div id='total'></div>");
-  if (total === 0) {
-    $("#total").html("");
-  } else {
-    $("#total").html("Total: $" + total);
-  }
-}
+    //$("input[name='js-frameworks']").change(function(event){
+    //    if ($("input[name='js-frameworks']").prop("checked")) {
+    //      var item = {
+    //        name:"js-frameworks",
+    //    day: "tuesday",
+    //    price: 100,
+    //    begin:900,
+    //    end:1200}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      $("input[name=express]").prop('disabled', true);
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("js-frameworks");
+    //   console.log(totalCart());
+    //      $("input[name=express]").prop('disabled', false);
+    //      displayTotal();
+    //}
+    //});
 
-//$(".activities input").change(function(event) {
-//  if($(".activities input").prop("checked")) {
-//   console.log("dfa");
-//  }
-//});
 
-//$("input[name='all']").change(function(event){
-//    if ($("input[name='all']").prop("checked")) {
-//      var item = {
-//        name:"all",
-//        price: Number(200)
-//        }
-//      cart.push(item);
-//      //var total = totalCart();
-//      console.log(totalCart());
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("all");
-//   console.log(totalCart());
-//    displayTotal();
-//    }
-//});
-//
-//$("input[name='js-frameworks']").change(function(event){
-//    if ($("input[name='js-frameworks']").prop("checked")) {
-//      var item = {
-//        name:"js-frameworks",
-//    day: "tuesday",
-//    price: 100,
-//    begin:900,
-//    end:1200}
-//      cart.push(item);
-//      console.log(totalCart());
-//      $("input[name=express]").prop('disabled', true);
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("js-frameworks");
-//   console.log(totalCart());
-//      $("input[name=express]").prop('disabled', false);
-//      displayTotal();
-//}
-//});
-//
-//$("input[name='js-libs']").change(function(event){
-//    if ($("input[name='js-libs']").prop("checked")) {
-//      var item =  {name:"js-libs",
-//    day:"tuesday",
-//    price: 100,
-//    begin:1300,
-//    end:1600}
-//      cart.push(item);
-//      console.log(totalCart());
-//      $("input[name=node]").prop('disabled', true);
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("js-libs");
-//   console.log(totalCart());
-//      $("input[name=node]").prop('disabled', false);
-//      displayTotal();
-//}
-//});
-//
-//
-//$("input[name='express']").change(function(event){
-//    if ($("input[name='express']").prop("checked")) {
-//      var item =  {name:"express",
-//    day:"tuesday",
-//    price: 100,
-//    begin: 900,
-//    end: 1200}
-//      cart.push(item);
-//      console.log(totalCart());
-//      $("input[name=js-frameworks]").prop('disabled', true);
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("express");
-//   console.log(totalCart());
-//      $("input[name=js-frameworks]").prop('disabled', false);
-//      displayTotal();
-//}
-//});
-//
-//$("input[name='node']").change(function(event){
-//    if ($("input[name='node']").prop("checked")) {
-//      var item = {name:"node",
-//    day:"tuesday",
-//    price: 100,
-//    begin:1300,
-//    end:1600 }
-//      cart.push(item);
-//      console.log(totalCart());
-//      $("input[name=js-libs]").prop('disabled', true);
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("node");
-//   console.log(totalCart());
-//      $("input[name=js-libs]").prop('disabled', false);
-//      displayTotal();
-//}
-//});
-//
-//
-//$("input[name='build-tools']").change(function(event){
-//    if ($("input[name='build-tools']").prop("checked")) {
-//      var item =
-//          {name:"build-tools",
-//    day: "wednesday",
-//    price: 100,
-//    begin: 900,
-//    end: 1200}
-//      cart.push(item);
-//      console.log(totalCart());
-//      displayTotal();
-//    } else {
-//  removeItemFromCart("build-tools");
-//   console.log(totalCart());
-//      displayTotal();
-//}
-//});
-//
-//$("input[name='npm']").change(function(event){
-//    if ($("input[name='npm']").prop("checked")) {
-//      var item =
-//          {name:"npm",
-//    day:"wednsday",
-//    price: 100,
-//    begin: 1300,
-//    end: 1600}
-//      cart.push(item);
-//      console.log(totalCart());
-//      displayTotal();
-//
-//    } else {
-//  removeItemFromCart("npm");
-//   console.log(totalCart());
-//      displayTotal();
-//}
-//});
+
+
+    //Focus on first text box
+    $("#name").focus(); $("fieldset:eq(3) p:eq(0)").hide(); $("fieldset:eq(3) p:eq(1)").hide();
+
+    //add job role input for other selection
+    $("#title").on("change", function() {
+      var element = document.getElementById("title");
+      var stb = element.options[element.selectedIndex].value;
+      var input = "<form id='other-title'><div class='student-search'><input placeholder='Your Job Role'>    <button>Submit</button></div></form>";
+      if (stb == "other") {
+        $("fieldset:eq(0)").append(input);
+      } else if (stb !== "other") {
+        $("#other-title").remove();
+      };
+    })
+
+    //change values based off selection
+    $("#design").on("change", function() {
+      var element = document.getElementById("design");
+      var stb = element.options[element.selectedIndex].value;
+      if (stb == "js puns") {
+        $("option[value=tomato]").closest('option').remove();
+        $("option[value=steelblue]").closest('option').remove();
+        $("option[value=dimgrey]").closest('option').remove();
+        $("option[value=cornflowerblue]").closest('option').show();
+        $("option[value=darkslategrey]").closest('option').show();
+        $("option[value=gold]").closest('option').show();
+      } else if (stb == "heart js") {
+        $("option[value=cornflowerblue]").closest('option').remove();
+        $("option[value=darkslategrey]").closest('option').remove();
+        $("option[value=gold]").closest('option').remove();
+        $("option[value=tomato]").closest('option').show();
+        $("option[value=steelblue]").closest('option').show();
+        $("option[value=dimgrey]").closest('option').show();
+      } else {
+        $("option[value=cornflowerblue]").closest('option').show();
+        $("option[value=darkslategrey]").closest('option').show();
+        $("option[value=gold]").closest('option').show();
+        $("option[value=tomato]").closest('option').show();
+        $("option[value=steelblue]").closest('option').show();
+        $("option[value=dimgrey]").closest('option').show();
+      };
+    })
+
+
+    $("#payment").on("change", function() {
+      var element = document.getElementById("payment");
+      var stb = element.options[element.selectedIndex].value;
+      if (stb == "select_method") {
+        $("fieldset:eq(3) p:eq(0)").hide();
+        $("fieldset:eq(3) p:eq(1)").hide();
+        $("#credit-card").hide();
+      } else if (stb == "credit card") {
+        $("fieldset:eq(3) p:eq(0)").hide();
+        $("fieldset:eq(3) p:eq(1)").hide();
+        $("#credit-card").show();
+      } else if (stb == "paypal") {
+        $("#credit-card").hide();
+        $("fieldset:eq(3) p:eq(1)").hide();
+        $("fieldset:eq(3) p:eq(0)").show();
+      } else if (stb == "bitcoin") {
+        $("#credit-card").hide();
+        $("fieldset:eq(3) p:eq(0)").hide();
+        $("fieldset:eq(3) p:eq(1)").show();
+      };
+    })
+
+    function removeItemFromCart(name) {
+      // removes one item
+      for (var i in cart) {
+        if (cart[i].name === name) {
+          cart.splice(i, 1);
+        }
+        break;
+      }
+    }
+    //  saveCart();
+
+    function displayTotal() {
+      var total = totalCart();
+      $("fieldset:eq(2)").append("<div id='total'></div>");
+      if (total === 0) {
+        $("#total").html("");
+      } else {
+        $("#total").html("Total: $" + total);
+      }
+    }
+
+    //$(".activities input").change(function(event) {
+    //  if($(".activities input").prop("checked")) {
+    //   console.log("dfa");
+    //  }
+    //});
+
+    //$("input[name='all']").change(function(event){
+    //    if ($("input[name='all']").prop("checked")) {
+    //      var item = {
+    //        name:"all",
+    //        price: Number(200)
+    //        }
+    //      cart.push(item);
+    //      //var total = totalCart();
+    //      console.log(totalCart());
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("all");
+    //   console.log(totalCart());
+    //    displayTotal();
+    //    }
+    //});
+    //
+    //$("input[name='js-frameworks']").change(function(event){
+    //    if ($("input[name='js-frameworks']").prop("checked")) {
+    //      var item = {
+    //        name:"js-frameworks",
+    //    day: "tuesday",
+    //    price: 100,
+    //    begin:900,
+    //    end:1200}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      $("input[name=express]").prop('disabled', true);
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("js-frameworks");
+    //   console.log(totalCart());
+    //      $("input[name=express]").prop('disabled', false);
+    //      displayTotal();
+    //}
+    //});
+    //
+    //$("input[name='js-libs']").change(function(event){
+    //    if ($("input[name='js-libs']").prop("checked")) {
+    //      var item =  {name:"js-libs",
+    //    day:"tuesday",
+    //    price: 100,
+    //    begin:1300,
+    //    end:1600}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      $("input[name=node]").prop('disabled', true);
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("js-libs");
+    //   console.log(totalCart());
+    //      $("input[name=node]").prop('disabled', false);
+    //      displayTotal();
+    //}
+    //});
+    //
+    //
+    //$("input[name='express']").change(function(event){
+    //    if ($("input[name='express']").prop("checked")) {
+    //      var item =  {name:"express",
+    //    day:"tuesday",
+    //    price: 100,
+    //    begin: 900,
+    //    end: 1200}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      $("input[name=js-frameworks]").prop('disabled', true);
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("express");
+    //   console.log(totalCart());
+    //      $("input[name=js-frameworks]").prop('disabled', false);
+    //      displayTotal();
+    //}
+    //});
+    //
+    //$("input[name='node']").change(function(event){
+    //    if ($("input[name='node']").prop("checked")) {
+    //      var item = {name:"node",
+    //    day:"tuesday",
+    //    price: 100,
+    //    begin:1300,
+    //    end:1600 }
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      $("input[name=js-libs]").prop('disabled', true);
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("node");
+    //   console.log(totalCart());
+    //      $("input[name=js-libs]").prop('disabled', false);
+    //      displayTotal();
+    //}
+    //});
+    //
+    //
+    //$("input[name='build-tools']").change(function(event){
+    //    if ($("input[name='build-tools']").prop("checked")) {
+    //      var item =
+    //          {name:"build-tools",
+    //    day: "wednesday",
+    //    price: 100,
+    //    begin: 900,
+    //    end: 1200}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      displayTotal();
+    //    } else {
+    //  removeItemFromCart("build-tools");
+    //   console.log(totalCart());
+    //      displayTotal();
+    //}
+    //});
+    //
+    //$("input[name='npm']").change(function(event){
+    //    if ($("input[name='npm']").prop("checked")) {
+    //      var item =
+    //          {name:"npm",
+    //    day:"wednsday",
+    //    price: 100,
+    //    begin: 1300,
+    //    end: 1600}
+    //      cart.push(item);
+    //      console.log(totalCart());
+    //      displayTotal();
+    //
+    //    } else {
+    //  removeItemFromCart("npm");
+    //   console.log(totalCart());
+    //      displayTotal();
+    //}
+    //});
