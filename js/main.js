@@ -1,4 +1,4 @@
-var userNumInput = document.getElementById("cc-num");
+const userNumInput = document.getElementById("cc-num");
 
 function getUserInput() {
   return userNumInput.value;
@@ -133,21 +133,7 @@ document.getElementById("cc-num").addEventListener("blur", function() {
 }, false);
 
 
-var cart = [];
-
-function Session(name, day, price, begin, end) {
-  this.name = name;
-  this.day = day;
-  this.price = price;
-  this.begin = begin;
-  this.end = end;
-}
-
-function addItemToCart(name, day, price, begin, end) {
-  var item = new Session(name, day, price, begin, end);
-  cart.push(item);
-  //  saveCart();
-}
+const cart = [];
 
 
 function totalCart() { // -> return total cost
@@ -158,14 +144,23 @@ function totalCart() { // -> return total cost
   return totalCost;
 }
 
-function checkCart() {
+function invalidate() { // -> return total cost
+   $(".activities input").each(function() {
+     $(this).prop('disabled', false);
+   });
   for (var i in cart) {
-    if (cart[i].time === time) {
-      $("input[name=" + name + "]").prop('disabled', false);
-    }
-
+    let name = cart[i].name;
+    let time = cart[i].time;
+    $(".activities input").each(function() {
+        let name2 = $(this).attr("name");
+        let lis = $(this).parent().text();
+        let time2 = lis.substring(lis.indexOf(" — "), lis.indexOf(","));
+      if (time == time2 && name !== name2) {
+          $("input[name=" + name2 + "]").prop('disabled', true);
+        }
+    })
   }
-};
+}
 
 
 $(".activities input").change(function(event) {
@@ -183,50 +178,14 @@ $(".activities input").change(function(event) {
         }
         cart.push(item);
         displayTotal();
-        disableBox(name, time);
+        invalidate();
       } else {
         cart.splice(item);
         displayTotal();
-        disableBox(name, time);
+        invalidate();
       }
-}
+      }
     );
-
-    function disableBox(name, time) {
-      $(".activities input").each(function() {
-        let name2 = $(this).attr("name");
-        let lis = $(this).parent().text();
-        let time2 = lis.substring(lis.indexOf(" — "), lis.indexOf(","));
-        if (time == time2 && name !== name2) {
-          $("input[name=" + name2 + "]").prop('disabled', true);
-        } else {
-          $("input[name=" + name2 + "]").prop('disabled', false);
-        }
-      })
-    }
-
-    //$("input[name='js-frameworks']").change(function(event){
-    //    if ($("input[name='js-frameworks']").prop("checked")) {
-    //      var item = {
-    //        name:"js-frameworks",
-    //    day: "tuesday",
-    //    price: 100,
-    //    begin:900,
-    //    end:1200}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      $("input[name=express]").prop('disabled', true);
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("js-frameworks");
-    //   console.log(totalCart());
-    //      $("input[name=express]").prop('disabled', false);
-    //      displayTotal();
-    //}
-    //});
-
-
-
 
     //Focus on first text box
     $("#name").focus(); $("fieldset:eq(3) p:eq(0)").hide(); $("fieldset:eq(3) p:eq(1)").hide();
@@ -294,16 +253,6 @@ $(".activities input").change(function(event) {
       };
     })
 
-    function removeItemFromCart(name) {
-      // removes one item
-      for (var i in cart) {
-        if (cart[i].name === name) {
-          cart.splice(i, 1);
-        }
-        break;
-      }
-    }
-    //  saveCart();
 
     function displayTotal() {
       var total = totalCart();
@@ -314,142 +263,3 @@ $(".activities input").change(function(event) {
         $("#total").html("Total: $" + total);
       }
     }
-
-    //$(".activities input").change(function(event) {
-    //  if($(".activities input").prop("checked")) {
-    //   console.log("dfa");
-    //  }
-    //});
-
-    //$("input[name='all']").change(function(event){
-    //    if ($("input[name='all']").prop("checked")) {
-    //      var item = {
-    //        name:"all",
-    //        price: Number(200)
-    //        }
-    //      cart.push(item);
-    //      //var total = totalCart();
-    //      console.log(totalCart());
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("all");
-    //   console.log(totalCart());
-    //    displayTotal();
-    //    }
-    //});
-    //
-    //$("input[name='js-frameworks']").change(function(event){
-    //    if ($("input[name='js-frameworks']").prop("checked")) {
-    //      var item = {
-    //        name:"js-frameworks",
-    //    day: "tuesday",
-    //    price: 100,
-    //    begin:900,
-    //    end:1200}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      $("input[name=express]").prop('disabled', true);
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("js-frameworks");
-    //   console.log(totalCart());
-    //      $("input[name=express]").prop('disabled', false);
-    //      displayTotal();
-    //}
-    //});
-    //
-    //$("input[name='js-libs']").change(function(event){
-    //    if ($("input[name='js-libs']").prop("checked")) {
-    //      var item =  {name:"js-libs",
-    //    day:"tuesday",
-    //    price: 100,
-    //    begin:1300,
-    //    end:1600}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      $("input[name=node]").prop('disabled', true);
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("js-libs");
-    //   console.log(totalCart());
-    //      $("input[name=node]").prop('disabled', false);
-    //      displayTotal();
-    //}
-    //});
-    //
-    //
-    //$("input[name='express']").change(function(event){
-    //    if ($("input[name='express']").prop("checked")) {
-    //      var item =  {name:"express",
-    //    day:"tuesday",
-    //    price: 100,
-    //    begin: 900,
-    //    end: 1200}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      $("input[name=js-frameworks]").prop('disabled', true);
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("express");
-    //   console.log(totalCart());
-    //      $("input[name=js-frameworks]").prop('disabled', false);
-    //      displayTotal();
-    //}
-    //});
-    //
-    //$("input[name='node']").change(function(event){
-    //    if ($("input[name='node']").prop("checked")) {
-    //      var item = {name:"node",
-    //    day:"tuesday",
-    //    price: 100,
-    //    begin:1300,
-    //    end:1600 }
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      $("input[name=js-libs]").prop('disabled', true);
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("node");
-    //   console.log(totalCart());
-    //      $("input[name=js-libs]").prop('disabled', false);
-    //      displayTotal();
-    //}
-    //});
-    //
-    //
-    //$("input[name='build-tools']").change(function(event){
-    //    if ($("input[name='build-tools']").prop("checked")) {
-    //      var item =
-    //          {name:"build-tools",
-    //    day: "wednesday",
-    //    price: 100,
-    //    begin: 900,
-    //    end: 1200}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      displayTotal();
-    //    } else {
-    //  removeItemFromCart("build-tools");
-    //   console.log(totalCart());
-    //      displayTotal();
-    //}
-    //});
-    //
-    //$("input[name='npm']").change(function(event){
-    //    if ($("input[name='npm']").prop("checked")) {
-    //      var item =
-    //          {name:"npm",
-    //    day:"wednsday",
-    //    price: 100,
-    //    begin: 1300,
-    //    end: 1600}
-    //      cart.push(item);
-    //      console.log(totalCart());
-    //      displayTotal();
-    //
-    //    } else {
-    //  removeItemFromCart("npm");
-    //   console.log(totalCart());
-    //      displayTotal();
-    //}
-    //});
