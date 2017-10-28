@@ -27,22 +27,36 @@ $("#payment").on("change", function() {
 })
 
 function verifyInputs() {
+  let message = "";
   let name = $("#name").val();
+  let letters = /^[a-zA-Z]+$/;
   let mail = $("#mail").val();
+  //regular expression for emails
   let check = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   var element = document.getElementById("payment");
   var stb = element.options[element.selectedIndex].value;
-  if ((name == "" || name == null) && (mail == "" || mail == null || !check.test(mail)) && (stb == "credit card")) {
-    alert("Email and Name are incorrect or incomplete");
-    $('#mail').css('border-color', 'red');
+  if (name == "" || name == null||!letters.test(name))  {
+    let nameMessage = "Name is blank";
     $('#name').css('border-color', 'red');
-    checkActivities
-  } else if ((name == "" || name == null) && (mail !== "" || mail !== null || mail.includes("@"))) {
-    alert("Name entry is blank");
-    $('#name').css('border-color', 'red');
-  } else if ((name !== "" || name !== null) && (mail == "" || mail == null || !mail.includes("@"))) {
-    alert("Email entry is blank or incorrect");
-    $('#mail').css('border-color', 'red');
+  } else {
+    let nameMessage = "";
+    $('#name').css('border-color', '#c1deeb');
+  }
+  if (mail == "" || mail == null || !check.test(mail)) {
+    let emailMessage = "Email is blank or incorrect<br>";
+     $('#mail').css('border-color', 'red');
+  } else {
+    $('#mail').css('border-color', '#c1deeb');
+  }
+  if (activitiesCheck()) {
+    let activiesMessages = "No activities checked";
+    $('.activities legend').css('color', 'red');
+  } else {
+    $('.activities legend').css('color', ' #184f68');
+  }
+  let errorMessage = nameMessage + "\n" + emailMessage + "\n" + activiesMessages;
+  if (errorMessage == "")  {
+    alert(errorMessage);
   } else {
     location.reload();
   }
@@ -51,9 +65,61 @@ function verifyInputs() {
 
 $("form").submit(function(event) {
   event.preventDefault();
-  //verifyInputs();
-
+  verifyInputs();
 });
+
+
+function lengthCheck() {
+  let ccNum = getUserInput(),
+  let validCard = false;
+  var numbers = /^[0-9]+$/;
+  if ((numbers.test(ccNum)) ) {
+    return false;
+  }
+};
+
+  if (ccNum.length === 15) { //american express
+    for (var i = ccNumSplit.length - 1; i >= 0; i--) {
+      if (i % 2 === 0) {
+        singleNums.push(ccNumSplit[i]);
+      } else {
+        doubleNums.push((ccNumSplit[i] * 2).toString());
+      }
+    }
+  } else if (ccNum.length === 16) {
+    for (var i = ccNumSplit.length - 1; i >= 0; i--) {
+      if (i % 2 !== 0) {
+        singleNums.push(ccNumSplit[i]);
+      } else {
+        doubleNums.push((ccNumSplit[i] * 2).toString());
+      }
+    }
+  }
+  //joining makes an array to a string and I split them up again
+  //so that every number is a single digit and convert back to array
+
+  doubleNums = doubleNums.join("").split("");
+  finalArry = doubleNums.concat(singleNums);
+
+  for (var j = 0; j < finalArry.length; j++) {
+    sum += parseInt(finalArry[j]);
+  }
+
+  if (sum % 10 === 0) {
+    validCard = true;
+  }
+  //the console log is for you, so you can see the sum, all sums that are
+  //divisible by 10 should be good.  Just open up your console to view.
+
+  console.log(sum);
+  return validCard;
+  console.log(validCard);
+};
+
+
+
+
+
 
 
 function luhnCheck() {
@@ -106,35 +172,47 @@ function luhnCheck() {
   console.log(validCard);
 };
 
-//function zipCheck() {
-//  let zipNum = getUserInput(zipNumInput);
-//  let validZip = false;
-//  if (/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
-//    return true;
-//  }
-//  return validZip;
-//  console.log(validZip);
-//};
-//
-//function ccvCheck() {
-//  let ccvNum = getUserInput(ccNumInput);
-//  let validccvNum = false;
-//  if (/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
-//    return true;
-//  }
-//  return validccvNum;
-//  console.log(validccvNum);
-//};
+
+
+function zipCheck() {
+  let zipNum = getUserInput(zipNumInput);
+  let validZip = false;
+  if (/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
+    return true;
+  }
+  return validZip;
+  console.log(validZip);
+};
+
+function activitiesCheck() {
+  var n = $( "input:checked" ).length;
+   if(n <= 0) {
+     return true;
+   } else {
+    return false;
+   }
+};
+
+function ccvCheck() {
+  let ccvNum = getUserInput(ccNumInput);
+  let validccvNum = false;
+  if (/\d{5}(~\W[a-zA-Z])*$/g.test(zipNum))  {
+    return true;
+  }
+  return validccvNum;
+  console.log(validccvNum);
+};
+
+
 
 document.getElementById("cc-num").addEventListener("blur", function() {
-  if (luhnCheck()) {
+  if (!luhnCheck()) {
     $("#cc-num").css('border-color', 'red');
+    alert("Credit card incorrect");
   }
 }, false);
 
-
 const cart = [];
-
 
 function totalCart() { // -> return total cost
   var totalCost = 0;
