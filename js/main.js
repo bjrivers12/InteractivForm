@@ -11,6 +11,26 @@ function getUserInput(inputID) { // -> return any value based on id
   return document.getElementById(inputID).value;
 }
 
+function activitiesCheck() {
+  var n = $("input:checked").length;
+  if (n <= 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+function cvvCheck() {
+  let cvvNum = getUserInput("cvv");
+  let validcvvNum = false;
+  if (/\d{3}(~\W[a-zA-Z])*$/g.test(cvvNum)) {
+    validcvvNum = true;
+
+  }
+  return validcvvNum;
+
+};
+
 function luhnCheck() { //-->Complex luhn check will use algorithm to prove a credit card is real
   let ccNum = getUserInput("cc-num"),
     ccNumSplit = ccNum.split(""),
@@ -135,13 +155,43 @@ function verifyInputs() {
     } else {
       $("#cc-num").css('border-color', '#184f68');
     }
+
+
+    if (!zipCheck()) {
+      let zipMessages = "zip incorrect\n";
+      $("#zip").css('border-color', 'red');
+      message += zipMessages;
+    } else {
+      $("#zip").css('border-color', ' #184f68');
+    }
+
+
+    if (!cvvCheck()) {
+      let ccVMessages = "cvv number incorrect\n";
+      $("#cvv").css('border-color', 'red');
+      message += ccVMessages;
+    } else {
+      $("#cvv").css('border-color', ' #184f68');
+    }
+
   } else if (stb == "select_method") {
     let paymentMessage = "Please pick payment method";
     message += paymentMessage;
     $("fieldset:eq(3) legend").css('color', 'red');
   } else {
-     $("fieldset:eq(3) legend").css('color', '#184f68');
+    $("fieldset:eq(3) legend").css('color', '#184f68');
   }
+
+  //CCV check
+
+  //   if (ccvCheck()) {
+  //    let ccVMessages = "ccv number incorrect\n";
+  //    $("#ccv").css('border-color', 'red');
+  //    message += ccVMessages;
+  //  } else {
+  //    $("#ccv").css('color', ' #184f68');
+  //  }
+  //
 
   //Final Message test
   if (message !== "") {
@@ -169,54 +219,28 @@ function zipCheck() {
   return validZip;
 };
 
-var hasFired = false;
+//var hasFired = false;
 document.getElementById("zip").addEventListener("blur", function() {
-  if (!zipCheck() && getUserInput("zip").length > 0 && !hasFired) {
-    $("#zip").css('border-color', 'red');
-    hasFired = true;
-    alert("zip is incorrect");
-  } else if (zipCheck()){
-    hasFired = false;
+  if (!zipCheck() && getUserInput("zip").length > 0) {
+    if (getUserInput("zip").length < 5) {
+      alert("zip is too short");
+      $("#zip").css('border-color', 'red');
+      //      hasFired = true;
+    } else if (getUserInput("zip").length > 5) {
+      alert("zip is too long");
+      $("#zip").css('border-color', 'red');
+      //      hasFired = true;
+    } else {
+      $("#zip").css('border-color', 'red');
+      //    hasFired = true;
+      alert("zip is incorrect");
+    }
+  } else if (zipCheck()) {
+    //    hasFired = false;
     $("#zip").css('border-color', ' #184f68');
   }
 }, true);
 
-
-function activitiesCheck() {
-  var n = $("input:checked").length;
-  if (n <= 0) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-function ccvCheck() {
-  let ccvNum = getUserInput("ccv");
-  let validccvNum = false;
-  if (/\d{5}(~\W[a-zA-Z])*$/g.test(ccvNum)) {
-    validccvNum = true;
-  }
-  return validccvNum;
-};
-
-document.getElementById("ccv").addEventListener("blur", function() {
-  if (!ccvCheck() && getUserInput("ccv").length > 0) {
-    $("#ccv").css('border-color', 'red');
-    alert("ccv incorrect length or data type");
-  } else {
-    $("#ccv").css('color', ' #184f68');
-  }
-}, false);
-
-document.getElementById("cc-num").addEventListener("blur", function() {
-  if (!luhnCheck() && getUserInput("cc-num").length > 0) {
-    $("#cc-num").css('border-color', 'red');
-//    alert("Credit card incorrect");
-  } else {
-    $("#cc-num").css('color', ' #184f68');
-  }
-}, false);
 
 
 //Cart Manipulation
@@ -298,7 +322,7 @@ $("#design").on("change", function() { //--> Fuction to change the shirts
   var element = document.getElementById("design");
   var stb = element.options[element.selectedIndex].value;
   if (stb == "js puns") {
-   $("#colors-js-puns").show();
+    $("#colors-js-puns").show();
     $("#color").val("cornflowerblue");
     $("option[value=tomato]").closest('option').hide();
     $("option[value=steelblue]").closest('option').hide();
