@@ -5,6 +5,7 @@ $("#name").focus();
 $("fieldset:eq(3) p:eq(0)").hide();
 $("fieldset:eq(3) p:eq(1)").hide();
 $("#colors-js-puns").hide();
+$("#other-title").hide();
 
 //Section for validating the credit card input section (card, zip, ccv)
 function getUserInput(inputID) { // -> return any value based on id
@@ -182,16 +183,6 @@ function verifyInputs() {
     $("fieldset:eq(3) legend").css('color', '#184f68');
   }
 
-  //CCV check
-
-  //   if (ccvCheck()) {
-  //    let ccVMessages = "ccv number incorrect\n";
-  //    $("#ccv").css('border-color', 'red');
-  //    message += ccVMessages;
-  //  } else {
-  //    $("#ccv").css('color', ' #184f68');
-  //  }
-  //
 
   //Final Message test
   if (message !== "") {
@@ -282,37 +273,15 @@ function displayTotal() { //-->Display the total in the cart in the activities s
   }
 }
 
-$(".activities input").change(function(event) { //-->Puts items in the cart or take them out
-  event.preventDefault();
-  if ($(this).prop("checked")) {
-    let name = $(this).attr("name"),
-      info = $(".activities input[name=" + name + "]").parent().text(),
-      price = Number(info.substring(info.indexOf("$") + 1, info.indexOf("$") + 4)),
-      time = info.substring(info.indexOf(" — "), info.indexOf(","));
-    var item = {
-      name: name,
-      time: time,
-      price: price,
-    }
-    cart.push(item);
-    displayTotal();
-    invalidate();
-  } else {
-    cart.splice(item);
-    displayTotal();
-    invalidate();
-  }
-});
 
 //Job role input
 $("#title").on("change", function() { //--> add job role input for other selection
   let element = document.getElementById("title"),
-    stb = element.options[element.selectedIndex].value,
-    input = "<form id='other-title'><div class='student-search'><input placeholder='Your Job Role'><button>Submit</button></div></form>";
+    stb = element.options[element.selectedIndex].value;
   if (stb == "other") {
-    $("fieldset:eq(0)").append(input);
+    $("#other-title").show();
   } else if (stb !== "other") {
-    $("#other-title").remove();
+    $("#other-title").hide();
   };
 })
 
@@ -348,4 +317,46 @@ $("#design").on("change", function() { //--> Fuction to change the shirts
     $("option[value=steelblue]").closest('option').show();
     $("option[value=dimgrey]").closest('option').show();
   };
+});
+
+function newTotal() { // -> check if checked and add total
+  let finalTotal = 0;
+  $(".activities input").each(function() {
+    if ($(this).prop("checked")) {
+      let name = $(this).attr("name"),
+        info = $(".activities input[name=" + name + "]").parent().text();
+      let price = Number(info.substring(info.indexOf("$") + 1, info.indexOf("$") + 4));
+      finalTotal += price;
+    }
+
+  })
+  return finalTotal
+};
+
+
+$(".activities input").change(function(event) { //-->Puts items in the cart or take them out
+  event.preventDefault();
+  if ($(this).prop("checked")) {
+    let name = $(this).attr("name"),
+      info = $(".activities input[name=" + name + "]").parent().text(),
+      price = Number(info.substring(info.indexOf("$") + 1, info.indexOf("$") + 4)),
+      time = info.substring(info.indexOf(" — "), info.indexOf(","));
+    var item = {
+      name: name,
+      time: time,
+      price: price,
+    }
+    cart.push(item);
+    displayTotal();
+    invalidate();
+    //    newInvalidate();
+    console.log(cart);
+    console.log(cart.indexOf(item));
+  } else {
+    cart.splice(cart.indexOf(item), 1);
+    displayTotal();
+    invalidate();
+    console.log(cart);
+    console.log(cart.indexOf(item));
+  }
 });
