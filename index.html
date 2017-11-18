@@ -1,20 +1,23 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Register for Full Stack Conf</title>
+  <title>Register for Full Stack Conf</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-	<div class="container">
+  <div class="container">
 
     <header>
       <span>Register for</span>
       <h1>Full Stack Conf</h1>
     </header>
 
-    <form action="index.html" method="post">
+    <form action="index.html" method="post" novalidate>
 
       <fieldset>
         <legend>Basic Info</legend>
@@ -34,6 +37,12 @@
           <option value="student">Student</option>
           <option value="other">Other</option>
         </select>
+
+        <br>
+        <input id="other-title" placeholder='Your Job Role'>
+
+
+
       </fieldset>
 
       <fieldset class="shirt">
@@ -48,6 +57,13 @@
             <option value="extra large">XL</option>
           </select>
         </div>
+
+
+
+
+
+
+
 
         <div>
           <label for="design">Design:</label>
@@ -94,10 +110,12 @@
         </select>
 
         <div id="credit-card" class="credit-card">
+          <div id="resultDiv"></div>
+
 
           <div class="col-6 col">
             <label for="cc-num">Card Number:</label>
-        	  <input id="cc-num" name="user_cc-num" type="text">
+            <input id="cc-num" name="user_cc-num" type="text">
           </div>
 
           <div class="col-3 col">
@@ -136,11 +154,11 @@
         </div>
 
         <div>
-        	<p>If you selected the PayPal option we'll take you to Paypal's site to set up your billing information, when you click “Register” below.</p>
+          <p>If you selected the PayPal option we'll take you to Paypal's site to set up your billing information, when you click “Register” below.</p>
         </div>
 
         <div>
-        	<p>If you selected the Bitcoin option we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>
+          <p>If you selected the Bitcoin option we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>
         </div>
 
       </fieldset>
@@ -149,9 +167,10 @@
 
     </form>
 
-	</div>
+  </div>
 
   <script src="js/jquery-1.11.2.min.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>
